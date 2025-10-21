@@ -7,7 +7,6 @@ import ChatInput from './components/ChatInput';
 import ChatOutput from './components/ChatOutput';
 
 export default function Home() {
-  // chat llm 业务 抽离
   const {
     input, // 输入框的值
     messages, // 消息列表

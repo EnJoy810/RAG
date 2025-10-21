@@ -9,18 +9,17 @@ import {
     createClient
 } from '@supabase/supabase-js';
 
-interface RecipeChunk {
-    recipe_name: string;
-    cuisine_type: string;
-    difficulty: string;
+interface ChunkData {
+    id: string;
+    content: string;
     url: string;
     date_updated: string;
-    content: string;
+    similarity: number;
 }
 
 const supabase = createClient(
-    process.env.SUPABASE_URL ?? "",
-    process.env.SUPABASE_KEY ?? ""
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
 );
 
 const openai = createOpenAI({
@@ -48,11 +47,8 @@ async function fetchRelevantRecipes(embedding: number[]) {
     if (error) throw error;
     console.log(data, '////////////////')
     return JSON.stringify(
-        data.map((item: RecipeChunk) => `
-        菜谱名称: ${item.recipe_name || '未知'}
-        菜系类型: ${item.cuisine_type || '家常菜'}  
-        制作难度: ${item.difficulty || '中等'}
-        来源链接: ${item.url}
+        data.map((item: ChunkData) => `
+        内容来源: ${item.url}
         更新时间: ${item.date_updated}
         详细内容: ${item.content}
       `)
